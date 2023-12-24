@@ -1,0 +1,36 @@
+pipeline {
+    agent none
+   
+    
+
+    stages {
+        stage('Build Docker Image') { 
+            agent {
+                node {
+                        label "agent1"
+                    }
+            }
+
+            environment {
+                VERSION = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+                DOCKER_CRED = credentials('dockerhub-credential-anduc137')
+            }
+
+            steps {
+                    echo "Building: $VERSION"
+                    sh "docker build -t nodejs:$VERSION ."
+                    sh "docker login -u annguyen137 -p $DOCKER_CRED"
+                    sh "docker tag nodejs:$VERSION annguyen137/nodejs:$VERSION"
+                    sh "docker push annguyen137/nodejs:$VERSION"
+                    sh "docker rmi -f annguyen137/nodejs:$VERSION"
+            }
+                
+        }
+
+        stage('Done') {
+            steps {
+                echo "Build done: $VERSION"
+            }
+        }
+    }
+}

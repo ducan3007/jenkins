@@ -1,0 +1,34 @@
+pipeline {
+    agent none
+
+    parameters {
+        choice(name: 'ENV', choices: ['dev', 'prod', 'stage'], description: 'The node label to run the pipeline on')
+        choice(name: 'NODE', choices: ['agent1', 'built-in-node','jenkins-prod'], description: 'The node label to run the pipeline on')
+        string(name: 'VERSION', defaultValue: '', description: 'Build version')
+    }
+
+
+    stages {
+        stage('Init') {
+            steps {
+                echo "ENV: ${params.ENV}"
+                echo "NODE: ${params.NODE}"
+                echo "Version: ${params.VERSION}"
+            }
+        }
+
+        stage('Deploy'){
+            agent {
+                node {
+                    label "${params.NODE}"
+                }
+            }
+            steps {
+                echo "Deploying to: ${params.NODE}"
+                echo "ENV: ${params.ENV}"
+                echo "Version: ${params.VERSION}"
+                sh "docker run -d --name nodejs-${params.ENV}-${params.VERSION} -p 4008:4008  --env-file .env.${params.ENV} annguyen137/nodejs:${params.VERSION}"
+            }
+        }
+    }
+}
