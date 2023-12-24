@@ -28,8 +28,8 @@ pipeline {
                 echo "ENV: ${params.ENV}"
                 echo "Version: ${params.VERSION}"
                 echo "Removing old container"
-                sh "docker rm -f nodejs-${params.ENV}-${params.VERSION}"
-                sh "docker run -d --name nodejs-${params.ENV}-${params.VERSION} -p 3000:3000  --env-file ./node/.env.${params.ENV} annguyen137/nodejs:${params.VERSION}"
+                sh "docker rm -f nodejs-${params.ENV}"
+                sh "docker run -d --name nodejs-${params.ENV} -p 3000:3000  --env-file ./node/.env.${params.ENV} annguyen137/nodejs:${params.VERSION}"
             }
         }
     }
