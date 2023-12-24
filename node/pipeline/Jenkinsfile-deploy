@@ -27,7 +27,7 @@ pipeline {
                 echo "Deploying to: ${params.NODE}"
                 echo "ENV: ${params.ENV}"
                 echo "Version: ${params.VERSION}"
-                sh "docker run -d --name nodejs-${params.ENV}-${params.VERSION} -p 4008:4008  --env-file .env.${params.ENV} annguyen137/nodejs:${params.VERSION}"
+                sh "docker run -d --name nodejs-${params.ENV}-${params.VERSION} -p 4008:4008  --env-file .node/.env.${params.ENV} annguyen137/nodejs:${params.VERSION}"
             }
         }
     }
