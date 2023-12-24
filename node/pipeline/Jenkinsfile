@@ -1,19 +1,25 @@
 pipeline {
     agent none
    
-    
+     environment {
+            VERSION = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+            DOCKER_CRED = credentials('dockerhub-credential-anduc137')
+    }
 
     stages {
+        stage('Init') {
+            steps {
+                echo "ENV: ${params.ENV}"
+                echo "Version: ${VERSION}"
+            }
+
+        }
+
         stage('Build Docker Image') { 
             agent {
                 node {
                         label "agent1"
                     }
-            }
-
-            environment {
-                VERSION = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
-                DOCKER_CRED = credentials('dockerhub-credential-anduc137')
             }
 
             steps {
