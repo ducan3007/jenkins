@@ -31,7 +31,7 @@ pipeline {
                 sh "docker stop nodejs-${params.ENV}"
                 echo "Removing old container"
                 sh "docker rm -f nodejs-${params.ENV}"
-                sh "docker run -d --name nodejs-${params.ENV} -p 3001:3001  --env-file ./node/.env.${params.ENV} annguyen137/nodejs:${params.VERSION}"
+                sh "docker run -d --name nodejs-${params.ENV} -p 3001:3001  --env-file ./node/.env.${params.ENV} --network=jenkins-net --restart=always annguyen137/nodejs:${params.VERSION}"
             }
         }
     }
