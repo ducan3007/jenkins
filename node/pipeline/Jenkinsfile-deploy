@@ -27,6 +27,8 @@ pipeline {
                 echo "Deploying to: ${params.NODE}"
                 echo "ENV: ${params.ENV}"
                 echo "Version: ${params.VERSION}"
+                echo "Stopping old container"
+                sh "docker stop nodejs-${params.ENV}"
                 echo "Removing old container"
                 sh "docker rm -f nodejs-${params.ENV}"
                 sh "docker run -d --name nodejs-${params.ENV} -p 3000:3000  --env-file ./node/.env.${params.ENV} annguyen137/nodejs:${params.VERSION}"

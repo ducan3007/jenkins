@@ -1,13 +1,15 @@
 const express = require('express');
+require('dotenv').config()
+
 const os = require('os');
 
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || '34.27.250.135',
+  host: process.env.MYSQL_HOST || '34.68.234.125',
   user: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
+  password: process.env.MYSQL_PASSWORD || 'root',
+  database: process.env.MYSQL_DATABASE || 'seta',
   waitForConnections: true,
   connectionLimit: 10,
   maxIdle: 10,
