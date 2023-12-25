@@ -27,9 +27,14 @@ pipeline {
                 echo "Deploying to: ${params.NODE}"
                 echo "ENV: ${params.ENV}"
                 echo "Version: ${params.VERSION}"
+                echo "Pulling latest image, exit if not found"
+                
+                sh "docker pull annguyen137/nodejs:${params.VERSION}"
+
                 echo "Stopping old container"
                 sh "docker stop nodejs-${params.ENV} || true"
                 echo "Removing old container"
+                
                 sh "docker rm -f nodejs-${params.ENV} || true"
                 sh "docker run -d --name nodejs-${params.ENV} -p 3000:3000  --env-file ./node/.env.${params.ENV} --network=jenkins-net --restart=always annguyen137/nodejs:${params.VERSION}"
             }
