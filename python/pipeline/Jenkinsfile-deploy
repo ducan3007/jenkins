@@ -27,7 +27,7 @@ pipeline {
                 echo "Deploying to: ${params.NODE}"
                 echo "ENV: ${params.ENV}"
                 echo "Version: ${params.VERSION}"
-
+                
                 sh "docker pull annguyen137/python:${params.VERSION}"
                 
                 echo "Stopping old container"
