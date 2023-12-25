@@ -28,8 +28,9 @@ pipeline {
                 echo "ENV: ${params.ENV}"
                 echo "Version: ${params.VERSION}"
                 echo "Stopping old container"
-                sh   "docker stop python-${params.ENV}"
+                sh   "docker stop python-${params.ENV} || true"
                 echo "Removing old container"
+                sh   "docker rm -f python-${params.ENV} || true"
                 sh   "docker run -d --name python-${params.ENV} -p 3001:3001  --env-file ./python/.env.${params.ENV} --network=jenkins-net --restart=always annguyen137/python:${params.VERSION}"
             }
         }
