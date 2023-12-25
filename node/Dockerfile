@@ -8,7 +8,7 @@ WORKDIR /app
 COPY --from=build /app/node_modules ./node_modules
 COPY . .
 
-EXPOSE 3001/tcp
+EXPOSE 3000/tcp
 ENTRYPOINT ["npm", "start"]
 
 
