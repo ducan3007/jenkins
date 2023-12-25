@@ -1,0 +1,42 @@
+pipeline {
+    agent none
+   
+     environment {
+            VERSION = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+            DOCKER_CRED = credentials('dockerhub-credential-anduc137')
+    }
+
+    stages {
+        stage('Init') {
+            steps {
+                echo "ENV: ${params.ENV}"
+                echo "Version: ${VERSION}"
+            }
+
+        }
+
+        stage('Build Docker Image') { 
+            agent {
+                node {
+                        label "agent1"
+                    }
+            }
+
+            steps {
+                    echo "Building: $VERSION"
+                    sh "docker build -t python:$VERSION ./python"
+                    sh "docker login -u annguyen137 -p $DOCKER_CRED"
+                    sh "docker tag python:$VERSION annguyen137/python:$VERSION"
+                    sh "docker push annguyen137/python:$VERSION"
+                    sh "docker rmi -f annguyen137/python:$VERSION"
+            }
+                
+        }
+
+        stage('Done') {
+            steps {
+                echo "Build done: $VERSION"
+            }
+        }
+    }
+}

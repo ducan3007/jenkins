@@ -1,0 +1,38 @@
+pipeline {
+    agent none
+
+    parameters {
+        choice(name: 'ENV', choices: ['dev', 'prod', 'stage'], description: 'The node label to run the pipeline on')
+        choice(name: 'NODE', choices: ['agent1', 'built-in-node','jenkins-prod'], description: 'The node label to run the pipeline on')
+        string(name: 'VERSION', defaultValue: '', description: 'Build version')
+    }
+
+
+    stages {
+        stage('Init') {
+            steps {
+                echo "ENV: ${params.ENV}"
+                echo "NODE: ${params.NODE}"
+                echo "Version: ${params.VERSION}"
+            }
+        }
+
+        stage('Deploy'){
+            agent {
+                node {
+                    label "${params.NODE}"
+                }
+            }
+            steps {
+                echo "Deploying to: ${params.NODE}"
+                echo "ENV: ${params.ENV}"
+                echo "Version: ${params.VERSION}"
+                echo "Stopping old container"
+                sh   "docker stop python-${params.ENV}"
+                echo "Removing old container"
+                sh   "docker rm -f python-${params.ENV}"
+                sh   "docker run -d --name python-${params.ENV} -p 3001:3001  --env-file ./node/.env.${params.ENV} --network=jenkins-net --restart=always annguyen137/python:${params.VERSION}"
+            }
+        }
+    }
+}
