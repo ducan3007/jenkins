@@ -6,7 +6,7 @@ const os = require('os');
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || '34.68.234.125',
+  host: process.env.MYSQL_HOST || '172.20.112.1',
   user: process.env.MYSQL_USER || 'root',
   password: process.env.MYSQL_PASSWORD || 'root',
   database: process.env.MYSQL_DATABASE || 'seta',
